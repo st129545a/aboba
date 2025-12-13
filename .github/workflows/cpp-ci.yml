@@ -1,0 +1,28 @@
+name: C++ Homework CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y g++ cmake make
+    
+    - name: Find and build all C++ projects
+      run: |
+        # Этот скрипт найдёт все .cpp файлы и попытается скомпилировать их
+        echo "Поиск C++ файлов для сборки..."
+        find . -name "*.cpp" -type f | while read cpp_file; do
+          dir=$(dirname "$cpp_file")
+          name=$(basename "$cpp_file" .cpp)
+          echo "Сборка: $cpp_file"
+          cd "$dir" && g++ -std=c++11 -o "$name" "$name.cpp" 2>/dev/null && echo "✓ Успешно: $dir/$name" || echo "✗ Ошибка сборки: $cpp_file"
+          cd - > /dev/null
+        done
