@@ -1,23 +1,37 @@
-# Compiled files
+# C++ compiled files
 *.o
 *.obj
 *.exe
 *.out
 *.app
+*.so
+*.a
+*.dll
+*.lib
+
+# Executables
+main
+test
+program
+a.out
 
 # Build directories
 build/
 dist/
 bin/
 obj/
+*.xcodeproj
+*.vcxproj
+*.sln
 
-# IDE files
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
@@ -26,5 +40,8 @@ CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
 Makefile
+compile_commands.json
 
-# Дополнительно для вашего компилятора/IDE
+# Локальные тестовые файлы
+*.log
+*.tmp
