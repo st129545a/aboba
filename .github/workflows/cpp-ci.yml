@@ -3,7 +3,7 @@ name: C++ Homework CI
 on: [push, pull_request]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     
     steps:
@@ -15,14 +15,33 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y g++ cmake make
     
-    - name: Find and build all C++ projects
+    - name: List homework directories
       run: |
-        # Этот скрипт найдёт все .cpp файлы и попытается скомпилировать их
-        echo "Поиск C++ файлов для сборки..."
-        find . -name "*.cpp" -type f | while read cpp_file; do
-          dir=$(dirname "$cpp_file")
-          name=$(basename "$cpp_file" .cpp)
-          echo "Сборка: $cpp_file"
-          cd "$dir" && g++ -std=c++11 -o "$name" "$name.cpp" 2>/dev/null && echo "✓ Успешно: $dir/$name" || echo "✗ Ошибка сборки: $cpp_file"
-          cd - > /dev/null
-        done
+        echo "=== Найденные домашние работы ==="
+        find . -maxdepth 1 -type d -name "hw*" | sort
+        echo ""
+    
+    - name: Build all homework
+      run: |
+        echo "=== Сборка всех домашних работ ==="
+        make all
+        echo ""
+        echo "=== Созданные исполняемые файлы ==="
+        find . -name "main" -type f -executable | sort
+    
+    - name: Run tests (if any)
+      run: |
+        echo "=== Запуск программ ==="
+        make test || echo "Нет программ для запуска"
+    
+    - name: Check for compilation artifacts
+      run: |
+        echo "=== Проверка на наличие артефактов сборки ==="
+        if find . -name "*.o" -o -name "*.out" -o -name "*.exe" | grep -q .; then
+          echo "ВНИМАНИЕ: Найдены файлы сборки в репозитории!"
+          find . -name "*.o" -o -name "*.out" -o -name "*.exe"
+          echo "Убедитесь, что они добавлены в .gitignore"
+          exit 1
+        else
+          echo "✓ Артефактов сборки нет (отлично!)"
+        fi
