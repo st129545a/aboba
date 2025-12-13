@@ -50,3 +50,26 @@ jobs:
         sudo apt-get install -y clang-format
         echo "=== Проверка форматирования ==="
         find . -name "*.cpp" -o -name "*.h" | xargs clang-format --dry-run --Werror || echo "Форматирование не соответствует стандарту"
+    - name: Build with sanitizers
+      run: |
+        echo "=== Сборка с санитайзерами ==="
+        for dir in $(find . -maxdepth 1 -type d -name "hw*" | sort); do
+          if [ -f "$dir/main.cpp" ]; then
+            echo "Сборка $dir с AddressSanitizer..."
+            cd "$dir"
+            g++ -std=c++11 -fsanitize=address -fno-omit-frame-pointer -g -o main_sanitized main.cpp
+            cd ..
+          fi
+        done
+    
+    - name: Run sanitized programs
+      run: |
+        echo "=== Запуск с санитайзерами ==="
+        for dir in $(find . -maxdepth 1 -type d -name "hw*" | sort); do
+          if [ -f "$dir/main_sanitized" ] && [ -x "$dir/main_sanitized" ]; then
+            echo "Запуск $dir/main_sanitized"
+            cd "$dir"
+            ASAN_OPTIONS=detect_leaks=1 ./main_sanitized 2>&1 || true
+            cd ..
+          fi
+        done
