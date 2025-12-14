@@ -45,3 +45,22 @@ compile_commands.json
 # Локальные тестовые файлы
 *.log
 *.tmp
+# Windows исполняемые файлы
+*.exe
+*.exp
+*.lib
+*.dll
+
+# Папки сборки Visual Studio
+x64/
+x86/
+Debug/
+Release/
+*.vcxproj
+*.sln
+*.vcxproj.filters
+
+# И дополнительные для надёжности:
+*.obj
+*.pdb
+*.ilk
