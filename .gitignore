@@ -104,8 +104,11 @@ Release/
 *.suo
 *.user
 *.sln
-*.vcxproj*
+*.vcxproj
 *.filters
+*.slnx
+*.vcxproj.filters
+*.vcxproj.user
 x64/
 x86/
 Debug/
