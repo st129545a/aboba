@@ -1,17 +1,17 @@
 #include <iostream>
 
-bool isOperator(const char* token) 
+bool isOperator(const char* token)
 {
     return (token[0] == '+' || token[0] == '-' || token[0] == '*' || token[0] == '/') && token[1] == '\0';
 }
 
-double evaluateRPN(const char* expression) 
+double evaluateRPN(const char* expression)
 {
     double stack[100];
     int top = -1;
 
     int i = 0;
-    while (expression[i] != '\0') 
+    while (expression[i] != '\0')
     {
         while (expression[i] == ' ') i++;
         if (expression[i] == '\0') break;
@@ -21,15 +21,15 @@ double evaluateRPN(const char* expression)
 
         char token[20];
         int j = 0;
-        for (int k = start; k < i; k++) 
+        for (int k = start; k < i; k++)
         {
             token[j++] = expression[k];
         }
         token[j] = '\0';
 
-        if (isOperator(token)) 
+        if (isOperator(token))
         {
-            if (top < 1) 
+            if (top < 1)
             {
                 std::cerr << "Error: insufficient operands for operator " << token << std::endl;
                 return 0;
@@ -45,7 +45,7 @@ double evaluateRPN(const char* expression)
             case '-': result = a - b; break;
             case '*': result = a * b; break;
             case '/':
-                if (b == 0) 
+                if (b == 0)
                 {
                     std::cerr << "Error: division by zero" << std::endl;
                     return 0;
@@ -74,7 +74,7 @@ double evaluateRPN(const char* expression)
                 j = 1;
             }
 
-            for (; token[j] != '\0'; j++) 
+            for (; token[j] != '\0'; j++)
             {
                 if (token[j] == '.')
                 {
@@ -83,17 +83,17 @@ double evaluateRPN(const char* expression)
                 }
                 else if (token[j] >= '0' && token[j] <= '9')
                 {
-                    if (hasDecimal) 
+                    if (hasDecimal)
                     {
                         fraction = fraction * 10 + (token[j] - '0');
                         decimal *= 10;
                     }
-                    else 
+                    else
                     {
                         num = num * 10 + (token[j] - '0');
                     }
                 }
-                else 
+                else
                 {
                     std::cerr << "Error: invalid token " << token << std::endl;
                     return 0;
@@ -105,7 +105,7 @@ double evaluateRPN(const char* expression)
             {
                 value += fraction / decimal;
             }
-            if (negative) 
+            if (negative)
             {
                 value = -value;
             }
@@ -123,21 +123,17 @@ double evaluateRPN(const char* expression)
     return stack[top];
 }
 
-int main() 
+int main()
 {
     const int MAX_LINE = 256;
     char buffer[MAX_LINE];
 
-    // Читаем строки из stdin
-    while (std::cin.getline(buffer, MAX_LINE)) 
+    while (std::cin.getline(buffer, MAX_LINE))
     {
-        // Пропускаем пустые строки
         if (buffer[0] == '\0') continue;
 
-        // Вычисляем результат
         double result = evaluateRPN(buffer);
 
-        // Выводим в stdout
         std::cout << buffer << " = " << result << std::endl;
     }
 
