@@ -104,9 +104,10 @@ Release/
 *.suo
 *.user
 *.sln
-*.vcxproj
+*.vcxproj*
 *.filters
-*.slnx
+*.sln
+*.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
 x64/
